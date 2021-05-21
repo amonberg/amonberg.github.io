@@ -2,35 +2,143 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<link rel="stylesheet"
+	href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
 <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script
+	src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 
-<script>
-var _hmt = _hmt || [];
-(function() {
-var hm = document.createElement("script");
-hm.src = "//hm.baidu.com/hm.js?73c27e26f610eb3c9f3feb0c75b03925";
-var s = document.getElementsByTagName("script")[0];
-s.parentNode.insertBefore(hm, s);
-})();
-</script>
+
 </head>
 <body>
 
-<div data-role="page">
-  <div data-role="header">
-    <h1>Welcome To My Homepage</h1>
-  </div>
+	<div data-role="page">
+		<div data-role="header">
+			<h1>Logging</h1>
+		</div>
 
-  <div data-role="main" class="ui-content">
-    <p>I Am Now A Mobile Developer!!</p>
-  </div>
+		<div data-role="main" class="ui-content">
+			<p></p>
 
-  <div data-role="footer">
-    <h1>Footer Text</h1>
-  </div>
-</div> 
+			<table id="my-table">
+				<thead>
+					<tr>
+						<th>Left</th>
+						<th></th>
+						<th>Right</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><input type="text" name="text-1" id="text-1" value=""></td>
+						<td><a href="#" id="reset" class="ui-btn ui-corner-all">Start</a></td>
+						<td><input type="text" name="text-2" id="text-2" value=""></td>
+					</tr>
+					<tr>
+						<td><a href="#" id="winleft" class="ui-btn ui-corner-all">W</a></td>
+						<td><a href="#" id="winnone" class="ui-btn ui-corner-all">L</a></td>
+						<td><a href="#" id="winright" class="ui-btn ui-corner-all">W</a></td>
+					</tr>
+					<tr>
+						<td><input type="text" name="res1" id="res1" value=""></td>
+						<td></td>
+						<td><input type="text" name="res2" id="res2" value=""></td>
+					</tr>
+				</tbody>
+			</table>
+
+		</div>
+
+		<div data-role="footer">
+			<h1>Ergebnis</h1>
+		</div>
+	</div>
+
+
+	<script>
+		$("#winleft").click(function() {
+			winleft();
+		});
+		$("#winnone").click(function() {
+			winnone();
+		});
+		$("#winright").click(function() {
+			winright();
+		});
+		$("#reset").click(function() {
+			start();
+		});
+		var counter = 0;
+		var m1 = 100;
+		var m2 = 100;
+		var e1 = 1;
+		var e2 = 1;
+		var max1 = 100;
+		var max2 = 100;
+
+		function start() {
+			counter = 0;
+			m1 = 100;
+			m2 = 100;
+			e1 = 1;
+			e2 = 1;
+		}
+		function winleft() {
+			counter++;
+			m1 = m1 + e1;
+			if (m1 > max1) {
+				max1 = m1;
+			}
+			m2 = m2 - e2;
+			e1 = play(true, counter, e1, m1,max1);
+			e2 = play(false, counter, e2, m2,max2);
+			setresult(e1,e2);
+		}
+		function winnone() {
+			counter++;
+			m1 = m1 - e1;
+			m2 = m2 - e2;
+			e1 = play(true, counter, e1, m1,max1);
+			e2 = play(false, counter, e2, m2,max2);
+			setresult(e1,e2);
+		}
+		function winright() {
+			counter++;
+			m1 = m1 - e1;
+			m2 = m2 + e2;
+			if (m2 > max2) {
+				max2 = m2;
+			}
+			e1 = play(false, counter, e1,m1, max1);
+			e2 = play(true, counter, e2, m2,max2);
+			setresult(e1,e2);
+		}
+		function play(win, cou, e, mo, ma) {
+			if (win) {
+			} else {
+				if (cou % 3 == 0) {
+					e++;
+				}
+			}
+			
+			if (mo >= ma) {
+				e = 1;
+			}
+			return e;
+		}
+		function setresult(e1,e2){
+			sbad="*********************";
+			sgood="xxxxxxxxxxxxxxxxxxxxxxx";
+			if(m1>m2){
+				//$("#res1").val(sgood.substring(0,e1)+"+");
+				$("#res1").val(e1+"+");
+				$("#res2").val(e1+"*");
+			}else{
+				$("#res1").val(e2+"-");
+				$("#res2").val(e2+"+");
+			}
+		}
+	</script>
 
 </body>
 </html>
