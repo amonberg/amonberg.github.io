@@ -23,13 +23,14 @@
 			<div data-role="collapsible">
 				    
 				<h4>Setting</h4>
-				<p>Gamename
-				    <input name="gamename"
-					id="gamename" value="" autocomplete="off">
-				</p>    
-				<p>Luckynumber
-				    <input type="password" data-clear-btn="true" name="glueckszahl"
-					id="glueckszahl" value="1" autocomplete="off">
+				<p>
+					Gamename     <input name="gamename" id="gamename" value=""
+						autocomplete="off">
+				</p>
+				    
+				<p>
+					Luckynumber     <input type="password" data-clear-btn="true"
+						name="glueckszahl" id="glueckszahl" value="1" autocomplete="off">
 				</p>
 				<p>
 					<a href="#" id="reset" class="ui-btn ui-corner-all">Start</a>
@@ -56,9 +57,9 @@
 						<td><a href="#" id="winright" class="ui-btn ui-corner-all">Win</a></td>
 					</tr>
 					<tr>
-						<td></td>
 						<td><input type="text" name="res1" id="res1" value=""></td>
 						<td></td>
+						<td><input type="text" name="res2" id="res2" value=""></td>
 					</tr>
 				</tbody>
 			</table>
@@ -92,7 +93,7 @@
 		var e2 = 1;
 		var max1 = 100;
 		var max2 = 100;
-		var glueckszahl=1;
+		var glueckszahl = 1;
 		var results = [];
 		function start() {
 			counter = 0;
@@ -100,9 +101,9 @@
 			m2 = 100;
 			e1 = 1;
 			e2 = 1;
-			glueckszahl=$("#glueckszahl").val();
+			glueckszahl = $("#glueckszahl").val();
 			var t = new Date().getTime();
-			$("#gamename").val("Game_"+t);
+			$("#gamename").val("Game_" + t);
 			$("#results").val("");
 			results = [];
 		}
@@ -153,12 +154,10 @@
 			return e;
 		}
 		function setresult(e1, e2) {
-			if (m1 > m2) {
-				$("#res1").val("+" + e1);
-			} else {
-				$("#res1").val(e2 + "+");
 
-			}
+			$("#res1").val(m1 + "+" + e1);
+			$("#res2").val(m2 + "+" + e2);
+
 			$("#results").val(results.join("-"))
 		}
 	</script>
