@@ -2,11 +2,12 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet"
-	href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
-<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-<script
-	src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<link rel="stylesheet" href="js/jquery.mobile.custom.theme.min.css">
+<link rel="stylesheet" href="js/jquery.mobile.custom.structure.min.css">
+<script src="js/jquerymin.js"></script>
+<script src="js/jquery.mobile.custom.min.js"></script>
+
+
 
 
 </head>
@@ -14,12 +15,27 @@
 
 	<div data-role="page">
 		<div data-role="header">
-			<h1>Logging</h1>
+			<h1>Aufzeichnung des Spiels</h1>
 		</div>
 
 		<div data-role="main" class="ui-content">
 			<p></p>
+			<div data-role="collapsible">
+				    
+				<h4>Setting</h4>
+				<p>Gamename
+				    <input name="gamename"
+					id="gamename" value="" autocomplete="off">
+				</p>    
+				<p>Luckynumber
+				    <input type="password" data-clear-btn="true" name="glueckszahl"
+					id="glueckszahl" value="1" autocomplete="off">
+				</p>
+				<p>
+					<a href="#" id="reset" class="ui-btn ui-corner-all">Start</a>
+				</p>
 
+			</div>
 			<table id="my-table">
 				<thead>
 					<tr>
@@ -31,18 +47,18 @@
 				<tbody>
 					<tr>
 						<td><input type="text" name="text-1" id="text-1" value=""></td>
-						<td><a href="#" id="reset" class="ui-btn ui-corner-all">Start</a></td>
+						<td></td>
 						<td><input type="text" name="text-2" id="text-2" value=""></td>
 					</tr>
 					<tr>
-						<td><a href="#" id="winleft" class="ui-btn ui-corner-all">W</a></td>
-						<td><a href="#" id="winnone" class="ui-btn ui-corner-all">L</a></td>
-						<td><a href="#" id="winright" class="ui-btn ui-corner-all">W</a></td>
+						<td><a href="#" id="winleft" class="ui-btn ui-corner-all">Win</a></td>
+						<td><a href="#" id="winnone" class="ui-btn ui-corner-all">Zero</a></td>
+						<td><a href="#" id="winright" class="ui-btn ui-corner-all">Win</a></td>
 					</tr>
 					<tr>
+						<td></td>
 						<td><input type="text" name="res1" id="res1" value=""></td>
 						<td></td>
-						<td><input type="text" name="res2" id="res2" value=""></td>
 					</tr>
 				</tbody>
 			</table>
@@ -51,6 +67,7 @@
 
 		<div data-role="footer">
 			<h1>Ergebnis</h1>
+			<input type="text" name="results" id="results" value="">
 		</div>
 	</div>
 
@@ -75,13 +92,19 @@
 		var e2 = 1;
 		var max1 = 100;
 		var max2 = 100;
-
+		var glueckszahl=1;
+		var results = [];
 		function start() {
 			counter = 0;
 			m1 = 100;
 			m2 = 100;
 			e1 = 1;
 			e2 = 1;
+			glueckszahl=$("#glueckszahl").val();
+			var t = new Date().getTime();
+			$("#gamename").val("Game_"+t);
+			$("#results").val("");
+			results = [];
 		}
 		function winleft() {
 			counter++;
@@ -90,17 +113,19 @@
 				max1 = m1;
 			}
 			m2 = m2 - e2;
-			e1 = play(true, counter, e1, m1,max1);
-			e2 = play(false, counter, e2, m2,max2);
-			setresult(e1,e2);
+			e1 = play(true, counter, e1, m1, max1);
+			e2 = play(false, counter, e2, m2, max2);
+			results.push("L");
+			setresult(e1, e2);
 		}
 		function winnone() {
 			counter++;
 			m1 = m1 - e1;
 			m2 = m2 - e2;
-			e1 = play(true, counter, e1, m1,max1);
-			e2 = play(false, counter, e2, m2,max2);
-			setresult(e1,e2);
+			e1 = play(true, counter, e1, m1, max1);
+			e2 = play(false, counter, e2, m2, max2);
+			results.push("0");
+			setresult(e1, e2);
 		}
 		function winright() {
 			counter++;
@@ -109,34 +134,32 @@
 			if (m2 > max2) {
 				max2 = m2;
 			}
-			e1 = play(false, counter, e1,m1, max1);
-			e2 = play(true, counter, e2, m2,max2);
-			setresult(e1,e2);
+			e1 = play(false, counter, e1, m1, max1);
+			e2 = play(true, counter, e2, m2, max2);
+			results.push("R");
+			setresult(e1, e2);
 		}
 		function play(win, cou, e, mo, ma) {
 			if (win) {
 			} else {
-				if (cou % 3 == 0) {
+				if (cou % glueckszahl == 0) {
 					e++;
 				}
 			}
-			
+
 			if (mo >= ma) {
 				e = 1;
 			}
 			return e;
 		}
-		function setresult(e1,e2){
-			sbad="*********************";
-			sgood="xxxxxxxxxxxxxxxxxxxxxxx";
-			if(m1>m2){
-				//$("#res1").val(sgood.substring(0,e1)+"+");
-				$("#res1").val(e1+"+");
-				$("#res2").val(e1+"*");
-			}else{
-				$("#res1").val(e2+"-");
-				$("#res2").val(e2+"+");
+		function setresult(e1, e2) {
+			if (m1 > m2) {
+				$("#res1").val("+" + e1);
+			} else {
+				$("#res1").val(e2 + "+");
+
 			}
+			$("#results").val(results.join("-"))
 		}
 	</script>
 
