@@ -15,7 +15,7 @@
 
 	<div data-role="page">
 		<div data-role="header">
-			<h1>Aufzeichnung des Spiels</h1>
+			<h1>Tracegame</h1>
 		</div>
 
 		<div data-role="main" class="ui-content">
@@ -23,6 +23,7 @@
 			<div data-role="collapsible">
 				    
 				<h4>Setting</h4>
+				<
 				<p>
 					Gamename     <input name="gamename" id="gamename" value=""
 						autocomplete="off">
@@ -30,7 +31,7 @@
 				    
 				<p>
 					Luckynumber     <input type="password" data-clear-btn="true"
-						name="glueckszahl" id="glueckszahl" value="1" autocomplete="off">
+						name="glueckszahl" id="glueckszahl" value="99" autocomplete="off">
 				</p>
 				<p>
 					<a href="#" id="reset" class="ui-btn ui-corner-all">Start</a>
@@ -39,28 +40,42 @@
 			</div>
 			<table id="my-table">
 				<thead>
-					<tr>
-						<th>Left</th>
-						<th></th>
-						<th>Right</th>
-					</tr>
+
 				</thead>
 				<tbody>
 					<tr>
-						<td><input type="text" name="text-1" id="text-1" value=""></td>
-						<td></td>
-						<td><input type="text" name="text-2" id="text-2" value=""></td>
+						Game<td><input id="gamecounter"></input></td>
 					</tr>
 					<tr>
-						<td><a href="#" id="winleft" class="ui-btn ui-corner-all">Win</a></td>
-						<td><a href="#" id="winnone" class="ui-btn ui-corner-all">Zero</a></td>
-						<td><a href="#" id="winright" class="ui-btn ui-corner-all">Win</a></td>
+					
+						<td><a href="#" id="tv0" class="ui-btn ui-corner-all">0</a></td>
+						<td><a href="#" id="tv1" class="ui-btn ui-corner-all">TV1</a></td>
+						<td><a href="#" id="tv2" class="ui-btn ui-corner-all">TV2</a></td>
+						<td><a href="#" id="tv3" class="ui-btn ui-corner-all">TV3</a></td>
+						<td><a href="#" id="tv4" class="ui-btn ui-corner-all">TV4</a></td>
+						<td><a href="#" id="tv5" class="ui-btn ui-corner-all">TV5</a></td>
+						<td><a href="#" id="tv6" class="ui-btn ui-corner-all">TV6</a></td>
+
 					</tr>
 					<tr>
-						<td><input type="text" name="res1" id="res1" value=""></td>
-						<td></td>
-						<td><input type="text" name="res2" id="res2" value=""></td>
+						<td>Einsatz</td>
+						<td><input id="tv1x"></input></td>
+						<td><input id="tv2x"></input></td>
+						<td><input id="tv3x"></input></td>
+						<td><input id="tv4x"></input></td>
+						<td><input id="tv5x"></input></td>
+						<td><input id="tv6x"></input></td>
 					</tr>
+					<tr>
+						<td>Money</td>
+						<td><input id="tv1m"></input></td>
+						<td><input id="tv2m"></input></td>
+						<td><input id="tv3m"></input></td>
+						<td><input id="tv4m"></input></td>
+						<td><input id="tv5m"></input></td>
+						<td><input id="tv6m"></input></td>
+					</tr>
+
 				</tbody>
 			</table>
 
@@ -74,91 +89,136 @@
 
 
 	<script>
-		$("#winleft").click(function() {
-			winleft();
+		//****************************
+		$("#tv0").click(function() {
+			hits[0]++;
+			played(0);
 		});
-		$("#winnone").click(function() {
-			winnone();
+		$("#tv1").click(function() {
+			played(1);
+			console.log(hits);
 		});
-		$("#winright").click(function() {
-			winright();
+		$("#tv2").click(function() {
+			played(2);
+			console.log(hits);
+		});
+		$("#tv3").click(function() {
+			played(3);
+		});
+		$("#tv4").click(function() {
+			played(4);
+		});
+		$("#tv5").click(function() {
+			played(5);
+		});
+		$("#tv6").click(function() {
+			played(6);
 		});
 		$("#reset").click(function() {
 			start();
 		});
+		var hits = [ 0, 0, 0, 0, 0, 0, 0 ];
+		var moneys = [ 100, 100, 100, 100, 100, 100, 100 ];
+		var einsatz = [ 0, 0, 0, 0, 0, 0, 0 ];
 		var counter = 0;
-		var m1 = 100;
-		var m2 = 100;
-		var e1 = 1;
-		var e2 = 1;
-		var max1 = 100;
-		var max2 = 100;
 		var glueckszahl = 1;
-		var results = [];
-		function start() {
-			counter = 0;
-			m1 = 100;
-			m2 = 100;
-			e1 = 1;
-			e2 = 1;
-			glueckszahl = $("#glueckszahl").val();
-			var t = new Date().getTime();
-			$("#gamename").val("Game_" + t);
-			$("#results").val("");
-			results = [];
-		}
-		function winleft() {
-			counter++;
-			m1 = m1 + e1;
-			if (m1 > max1) {
-				max1 = m1;
-			}
-			m2 = m2 - e2;
-			e1 = play(true, counter, e1, m1, max1);
-			e2 = play(false, counter, e2, m2, max2);
-			results.push("L");
-			setresult(e1, e2);
-		}
-		function winnone() {
-			counter++;
-			m1 = m1 - e1;
-			m2 = m2 - e2;
-			e1 = play(true, counter, e1, m1, max1);
-			e2 = play(false, counter, e2, m2, max2);
-			results.push("0");
-			setresult(e1, e2);
-		}
-		function winright() {
-			counter++;
-			m1 = m1 - e1;
-			m2 = m2 + e2;
-			if (m2 > max2) {
-				max2 = m2;
-			}
-			e1 = play(false, counter, e1, m1, max1);
-			e2 = play(true, counter, e2, m2, max2);
-			results.push("R");
-			setresult(e1, e2);
-		}
-		function play(win, cou, e, mo, ma) {
-			if (win) {
-			} else {
-				if (cou % glueckszahl == 0) {
-					e++;
+		var gamecounter = 0;
+		var totalgames = 100;
+		var totalwin = 100;
+		// ************************************************
+		function played(tv) {
+			hits[tv]++;
+			gamecounter++;
+
+			for (schritt = 1; schritt < 7; schritt++) {
+				if (schritt == tv) {
+					moneys[schritt] = moneys[schritt] + 6 * einsatz[schritt];
+				} else {
+					moneys[schritt] = moneys[schritt] - einsatz[schritt];
 				}
+				einsatz[schritt] = 0;
+
+				if (gamecounter + 10 > totalgames) {
+					totalgames += 10;
+				}
+				e = 0;
+				missinggames = totalgames - gamecounter;
+				missingmoney = moneys[schritt] - 100 - totalwin;
+				if (gamecounter > 200) {
+					totalwin = gamecounter / 2;
+				}
+				if (missingmoney < 0)
+					missingmoney = -1 * missingmoney;
+
+				e = missingmoney / missinggames;
+				console.log("i: " + schritt + " missingmoney " + missingmoney
+						+ "  missinggames " + missinggames + " e:" + e)
+				
+				if (e > 0 && e < 1)
+					e = 1;
+				if (e < 0)
+					e = -1 * e;
+				e = Math.round(e)
+				
+				einsatz[schritt] = e;
+
+			}
+			console.log("------------------------------");
+			console.log("win is " + tv);
+			//console.log(hits);
+			console.log("moneys: " + moneys);
+			console.log("einsatz: " + einsatz);
+
+			$("#gamecounter").val(gamecounter);
+			$("#tv0x").val("");
+			$("#tv1x").val("");
+			$("#tv2x").val("");
+			$("#tv3x").val("");
+			$("#tv4x").val("");
+			$("#tv5x").val("");
+			$("#tv6x").val("");
+			$("#tv1m").val(moneys[1]);
+			$("#tv2m").val(moneys[2]);
+			$("#tv3m").val(moneys[3]);
+			$("#tv4m").val(moneys[4]);
+			$("#tv5m").val(moneys[5]);
+			$("#tv6m").val(moneys[6]);
+			
+
+			var minmoneytoshow=100;
+			if (moneys[1] > minmoneytoshow) {
+				$("#tv1x").val(einsatz[1]);
+			}
+			if (moneys[2] > minmoneytoshow) {
+				$("#tv2x").val(einsatz[2]);
+			}
+			if (moneys[3] > minmoneytoshow) {
+				$("#tv3x").val(einsatz[3]);
+			}
+			if (moneys[4] > minmoneytoshow) {
+				$("#tv4x").val(einsatz[4]);
+			}
+			if (moneys[5] > minmoneytoshow) {
+				$("#tv5x").val(einsatz[5]);
+			}
+			if (moneys[6] > minmoneytoshow) {
+				$("#tv6x").val(einsatz[6]);
 			}
 
-			if (mo >= ma) {
-				e = 1;
-			}
-			return e;
 		}
+		// ************************************************
+
+		function start() {
+			glueckszahl = $("#glueckszahl").val();
+			hits = [ 0, 0, 0, 0, 0, 0, 0 ];
+			gamecounter = 0;
+
+		}
+
 		function setresult(e1, e2) {
-
-			$("#res1").val(m1 + "+" + e1);
-			$("#res2").val(m2 + "+" + e2);
-
-			$("#results").val(results.join("-"))
+			$("#res1").val(e1);
+			$("#res2").val(e2);
+			//$("#results").val(results.join("-"))
 		}
 	</script>
 
